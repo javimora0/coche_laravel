@@ -20,19 +20,25 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user()
 // });
 
-Route::get('usuarios/{dni}', [controladorPersona::class,'seleccionarUsuarioDNI']);
-Route::get('usuarios', [controladorPersona::class,'seleccionarUsuarios']);
-Route::post('usuarios', [controladorPersona::class, 'crearUsuario']);
-Route::put('usuarios/{dni}', [controladorPersona::class, 'modificarUsuario']);
-Route::delete('usuarios/{dni}', [controladorPersona::class, 'borrarUsuario']);
+Route::prefix('usuarios')->group(function () {
+    Route::get('/{dni}', [controladorPersona::class, 'seleccionarUsuarioDNI']);
+    Route::get('/', [controladorPersona::class, 'seleccionarUsuarios']);
+    Route::post('/', [controladorPersona::class, 'crearUsuario']);
+    Route::put('/{dni}', [controladorPersona::class, 'modificarUsuario']);
+    Route::delete('/{dni}', [controladorPersona::class, 'borrarUsuario']);
+});
 
-Route::get('coches/{matricula}', [controladorCoche::class, 'seleccionarCocheMatricula']);
-Route::get('coches', [controladorCoche::class, 'seleccionarCoches']);
-Route::delete('coches/{matricula}',[controladorCoche::class, 'borrarCoche']);
-Route::put('coche/{matricula}', [controladorCoche::class, 'modificarCoche']);
-Route::post('coches',[controladorCoche::class, 'insertarCoche']);
-Route::put('coches/modificar_precio/{matricula}', [controladorCoche::class, 'modificarPrecio']);
+Route::prefix('coches')->group(function () {
+    Route::get('/{matricula}', [controladorCoche::class, 'seleccionarCocheMatricula']);
+    Route::get('/', [controladorCoche::class, 'seleccionarCoches']);
+    Route::delete('/{matricula}', [controladorCoche::class, 'borrarCoche']);
+    Route::put('/{matricula}', [controladorCoche::class, 'modificarCoche']);
+    Route::post('/', [controladorCoche::class, 'insertarCoche']);
+    Route::put('/modificar_precio/{matricula}', [controladorCoche::class, 'modificarPrecio']);
+});
 
-Route::post('alquileres/solicitar/{dni}', [controladorAlquiler::class, 'comprobacionAlquiler']);
-Route::put('alquileres/devolucion', [controladorAlquiler::class, 'devolucionAlquiler']);
-Route::get('alquileres/ranking', [controladorAlquiler::class,'rankingAlquileres']);
+Route::prefix('alquileres')->group(function () {
+    Route::post('/solicitar/{dni}', [controladorAlquiler::class, 'comprobacionAlquiler']);
+    Route::put('/devolucion', [controladorAlquiler::class, 'devolucionAlquiler']);
+    Route::get('/ranking', [controladorAlquiler::class, 'rankingAlquileres']);
+});
